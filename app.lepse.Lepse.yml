@@ -33,8 +33,8 @@ modules:
     sources:
       - type: git
         url: "https://github.com/aervxa/lepse.git"
-        tag: v0.2.7
-        commit: f520debb825c739efdc73be2e813efff476b66c5
+        tag: v0.2.8
+        commit: a608867c47bc7862474044742435d8d12a54b65d
       - cargo-sources.json
       - node-sources.json
       - type: archive
