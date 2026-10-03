@@ -35,6 +35,10 @@ modules:
         url: "https://github.com/aervxa/lepse.git"
         tag: v0.2.8
         commit: 3cd5570dbb661796cefb043e8c4a2bb22f1c9b8d
+        x-checker-data:
+          type: git
+          tag-pattern: '^v(\d+\.\d+\.\d+)$' # maybe will add support fore suffixes later if needed
+          version-scheme: semantic
       - cargo-sources.json
       - node-sources.json
       - type: archive
