@@ -37,7 +37,7 @@ modules:
         commit: 3cd5570dbb661796cefb043e8c4a2bb22f1c9b8d
         x-checker-data:
           type: git
-          tag-pattern: '^v(\d+\.\d+\.\d+)$' # maybe will add support fore suffixes later if needed
+          tag-pattern: '^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$' # semver official javascript regex, but merged into one group and to add prefix 'v'
           version-scheme: semantic
       - cargo-sources.json
       - node-sources.json
