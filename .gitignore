@@ -1,8 +1,1 @@
-*
 tmp
-!shared-modules
-!.gitignore
-!.gitmodules
-!*.yml
-!*.json
-!update-sources.sh

@@ -11,6 +11,11 @@ if [ -z "$NEW_TAG" ]; then
     exit 0
 fi
 
+# Export TAG for other steps to use
+if [ -n "$GITHUB_ENV" ]; then
+    echo "TAG=$NEW_TAG" >> "$GITHUB_ENV"
+fi
+
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 cleanup() {
@@ -32,27 +37,31 @@ prune() (
     pnpm dlx turbo@$(node -p 'require("./package.json").devDependencies.turbo') prune @lepse/lachesis --out-dir tmp
 )
 
-prune "$OLD_TAG" old
 prune "$NEW_TAG" new
 
-PNPM_CHANGED=false
-CARGO_CHANGED=false
+# default is that it is always changed unless proven otherwise
+NODE_CHANGED=true
+CARGO_CHANGED=true
 
-if cmp -s old/tmp/pnpm-lock.yaml new/tmp/pnpm-lock.yaml; then
-    echo "pnpm lockfile unchanged! skipping."
-else
-    echo "pnpm lockfile changed!"
-    PNPM_CHANGED=true
+if [ -n "$OLD_TAG" ]; then
+    prune "$OLD_TAG" old
+
+    if cmp -s old/tmp/pnpm-lock.yaml new/tmp/pnpm-lock.yaml; then
+        echo "pnpm lockfile unchanged! skipping."
+        NODE_CHANGED=false
+    else
+        echo "pnpm lockfile changed!"
+    fi
+
+    if cmp -s old/tmp/apps/lachesis/src-tauri/Cargo.lock new/tmp/apps/lachesis/src-tauri/Cargo.lock; then
+        echo "Cargo lockfile unchanged! skipping."
+        CARGO_CHANGED=false
+    else
+        echo "Cargo lockfile changed!"
+    fi
 fi
 
-if cmp -s old/tmp/apps/lachesis/src-tauri/Cargo.lock new/tmp/apps/lachesis/src-tauri/Cargo.lock; then
-    echo "Cargo lockfile unchanged! skipping."
-else
-    echo "Cargo lockfile changed!"
-    CARGO_CHANGED=true
-fi
-
-if [ "$PNPM_CHANGED" = false ] && [ "$CARGO_CHANGED" = false ]; then
+if [ "$NODE_CHANGED" = false ] && [ "$CARGO_CHANGED" = false ]; then
     echo "No lockfile changed! skipping build tools and source generation."
     exit 0
 fi
@@ -65,12 +74,12 @@ python -m venv .venv
 source .venv/bin/activate
 
 # Generate node and cargo deps
-if [ "$PNPM_CHANGED" = true ]; then
+if [ "$NODE_CHANGED" = true ]; then
     pip install fbt/node # install python deps
-    flatpak-node-generator --no-requests-cache -o "$ROOT_DIR/node-sources.json" pnpm new/pnpm-lock.yaml --pnpm-store-version v11
+    flatpak-node-generator --no-requests-cache -o "$ROOT_DIR/node-sources.json" pnpm new/tmp/pnpm-lock.yaml --pnpm-store-version v11
 fi
 
 if [ "$CARGO_CHANGED" = true ]; then
     pip install aiohttp tomlkit # install python deps
-    python fbt/cargo/flatpak-cargo-generator.py -o "$ROOT_DIR/cargo-sources.json" new/apps/lachesis/src-tauri/Cargo.lock
+    python fbt/cargo/flatpak-cargo-generator.py -o "$ROOT_DIR/cargo-sources.json" new/tmp/apps/lachesis/src-tauri/Cargo.lock
 fi
