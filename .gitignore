@@ -5,4 +5,4 @@ tmp
 !.gitmodules
 !*.yml
 !*.json
-!update.sh
+!update-sources.sh
