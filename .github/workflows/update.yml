@@ -1,7 +1,7 @@
 name: Check for updates
 on:
   schedule: # for scheduling to work this file must be in the default branch
-    - cron: "0 0 * * *" # run every day
+    - cron: "0 0 * * 1" # run every week
   workflow_dispatch: # can be manually dispatched under GitHub's "Actions" tab
 
 jobs:
@@ -25,17 +25,32 @@ jobs:
         with:
           args: --edit-only app.lepse.Lepse.yml
 
-      - uses: pnpm/setup@v3
+      - name: Detect new tag
+        run: |
+          OLD_TAG=$(git diff app.lepse.Lepse.yml | sed -n 's/^\- *tag: *//p' |  tr -d '"'"'")
+          NEW_TAG=$(git diff app.lepse.Lepse.yml | sed -n 's/^\+ *tag: *//p' |  tr -d '"'"'")
+          if [ -z "$NEW_TAG" ]; then
+            echo "No updates to git source! skipping."
+            exit 0
+          fi
+          echo "OLD_TAG=$OLD_TAG" >> "$GITHUB_ENV"
+          echo "NEW_TAG=$NEW_TAG" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v7
+        if: env.NEW_TAG != ''
         with:
-          version: 12.6.0
-          runtime: node@24
+          node-version: 24
+      - run: npm install -g pnpm@12.6.0
+        if: env.NEW_TAG != ''
 
       - name: Update sources
+        if: env.NEW_TAG != ''
         run: ./update-sources.sh
 
       - name: Create Pull Request
-        if: env.TAG != '' # update-sources sets TAG on env regardless of sources
+        if: env.NEW_TAG != ''
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: "Update Lepse to ${{ env.TAG }}"
-          branch: update-${{ env.TAG }}
+          commit-message: "Update Lepse to ${{ env.NEW_TAG }}"
+          title: "Update Lepse to ${{ env.NEW_TAG }}"
+          branch: update-${{ env.NEW_TAG }}

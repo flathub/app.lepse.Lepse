@@ -1,21 +1,6 @@
 #!/usr/bin/bash
 set -e
 
-# Check for updates to the manifest
-
-OLD_TAG=$(git diff app.lepse.Lepse.yml | sed -n 's/^\- *tag: *//p' |  tr -d '"'"'")
-NEW_TAG=$(git diff app.lepse.Lepse.yml | sed -n 's/^\+ *tag: *//p' |  tr -d '"'"'")
-
-if [ -z "$NEW_TAG" ]; then
-    echo "No updates to git source! skipping."
-    exit 0
-fi
-
-# Export TAG for other steps to use
-if [ -n "$GITHUB_ENV" ]; then
-    echo "TAG=$NEW_TAG" >> "$GITHUB_ENV"
-fi
-
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 cleanup() {
