@@ -25,10 +25,10 @@ jobs:
         with:
           args: --edit-only app.lepse.Lepse.yml
 
-      - uses: pnpm/setup@v3
+      - uses: actions/setup-node@v7
         with:
-          version: 12.6.0
-          runtime: node@24
+          node-version: 24
+      - run: npm install -g pnpm@12.6.0
 
       - name: Update sources
         run: ./update-sources.sh
