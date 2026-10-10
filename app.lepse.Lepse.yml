@@ -1,18 +1,18 @@
 id: app.lepse.Lepse
 runtime: org.gnome.Platform
-runtime-version: "51"
+runtime-version: '51'
 sdk: org.gnome.Sdk
 command: app.lepse.Lepse
 finish-args:
-  - "--socket=wayland"
-  - "--socket=fallback-x11"
-  - "--socket=pulseaudio"
-  - "--device=dri"
-  - "--share=network"
-  - "--share=ipc"
-  - "--talk-name=org.kde.StatusNotifierWatcher"
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --device=dri
+  - --share=network
+  - --share=ipc
+  - --talk-name=org.kde.StatusNotifierWatcher
   # a version after wekit2gtk v2.52 seems to cause a regression that glitches css animations, disabling skia for compositing fixes it.
-  - "--env=WEBKIT_USE_SKIA_FOR_COMPOSITION=0"
+  - --env=WEBKIT_USE_SKIA_FOR_COMPOSITION=0
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -26,18 +26,18 @@ modules:
       env:
         HOME: /run/build/lepse
         CARGO_HOME: /run/build/lepse/cargo
-        CARGO_NET_OFFLINE: "true"
+        CARGO_NET_OFFLINE: 'true'
         XDG_CACHE_HOME: /run/build/lepse/flatpak-node/cache
         XDG_DATA_HOME: /run/build/lepse/flatpak-node/data
-        PNPM_CONFIG_TRUST_LOCKFILE: "true"
+        PNPM_CONFIG_TRUST_LOCKFILE: 'true'
     sources:
       - type: git
-        url: "https://github.com/aervxa/lepse.git"
-        tag: v0.2.8
-        commit: 3cd5570dbb661796cefb043e8c4a2bb22f1c9b8d
+        url: https://github.com/aervxa/lepse.git
+        tag: v0.2.9
+        commit: 413003470ac5ef01af210a6e59909450ed67d9c8
         x-checker-data:
           type: git
-          tag-pattern: '^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$' # semver official javascript regex, but merged into one group and to add prefix 'v'
+          tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$   # semver official javascript regex, but merged into one group and to add prefix 'v'
           version-scheme: semantic
       - cargo-sources.json
       - node-sources.json
