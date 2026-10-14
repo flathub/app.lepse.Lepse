@@ -13,6 +13,9 @@ finish-args:
   - --talk-name=org.kde.StatusNotifierWatcher
   # a version after wekit2gtk v2.52 seems to cause a regression that glitches css animations, disabling skia for compositing fixes it.
   - --env=WEBKIT_USE_SKIA_FOR_COMPOSITION=0
+  # these two are generated names by the single-instance plugin that does <id>.SingleInstance
+  - --talk-name=app.lepse.Lepse.SingleInstance
+  - --own-name=app.lepse.Lepse.SingleInstance
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
   - org.freedesktop.Sdk.Extension.rust-stable
