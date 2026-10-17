@@ -33,8 +33,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/aervxa/lepse.git
-        tag: v0.2.9
-        commit: 413003470ac5ef01af210a6e59909450ed67d9c8
+        tag: v0.3.0
+        commit: d326eb7613fe8b96496740bb03c1d30413a44e4b
         x-checker-data:
           type: git
           tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$   # semver official javascript regex, but merged into one group and to add prefix 'v'
