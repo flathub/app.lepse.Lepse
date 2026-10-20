@@ -1,46 +1,58 @@
 id: app.lepse.Lepse
 runtime: org.gnome.Platform
-runtime-version: '51'
+runtime-version: "51"
 sdk: org.gnome.Sdk
-command: app.lepse.Lepse
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.node24
+  - org.freedesktop.Sdk.Extension.rust-stable
+
+command: lepse
+rename-desktop-file: lepse.desktop
+rename-icon: lepse
+
 finish-args:
-  - --socket=wayland
-  - --socket=fallback-x11
+  - --socket=x11 # cef is x11 only
   - --socket=pulseaudio
   - --device=dri
   - --share=network
   - --share=ipc
   - --talk-name=org.kde.StatusNotifierWatcher
-  # a version after wekit2gtk v2.52 seems to cause a regression that glitches css animations, disabling skia for compositing fixes it.
-  - --env=WEBKIT_USE_SKIA_FOR_COMPOSITION=0
-sdk-extensions:
-  - org.freedesktop.Sdk.Extension.node24
-  - org.freedesktop.Sdk.Extension.rust-stable
-build-options:
-  append-path: >-
-    /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin:/run/build/lepse/pnpm-bin
+
 modules:
+  - name: zypak
+    sources:
+      - type: git
+        url: https://github.com/refi64/zypak
+        tag: v2025.09
+        commit: 693a71c5ffa80ec9c9ce2ae03b1ccc493c698e53
+
   - name: lepse
     buildsystem: simple
     build-options:
+      append-path: /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin:/run/build/lepse/pnpm-bin
       env:
         HOME: /run/build/lepse
         CARGO_HOME: /run/build/lepse/cargo
-        CARGO_NET_OFFLINE: 'true'
+        CARGO_NET_OFFLINE: "true"
         XDG_CACHE_HOME: /run/build/lepse/flatpak-node/cache
         XDG_DATA_HOME: /run/build/lepse/flatpak-node/data
-        PNPM_CONFIG_TRUST_LOCKFILE: 'true'
+        PNPM_CONFIG_TRUST_LOCKFILE: "true"
+        # this is where the cef sources are downloaded (cef-dll-sys looks in <CEF_PATH>/<cef version>/<os_arch>)
+        CEF_PATH: /run/build/lepse/cef
+
     sources:
       - type: git
         url: https://github.com/aervxa/lepse.git
-        tag: v0.3.0
-        commit: d326eb7613fe8b96496740bb03c1d30413a44e4b
+        tag: v0.3.2
+        commit: 00b097aae6c3b0dd8dd076ad8c1162d726feee4d
         x-checker-data:
           type: git
-          tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$   # semver official javascript regex, but merged into one group and to add prefix 'v'
+          tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$ # semver official javascript regex, but merged into one group and to add prefix 'v'
           version-scheme: semantic
       - cargo-sources.json
       - node-sources.json
+
+      # pnpm
       - type: archive
         only-arches:
           - x86_64
@@ -57,40 +69,65 @@ modules:
         sha512: >-
           f21dac3682211c3a470d8a9964287d3d7afa92ba96d746ed6f4187546bb0ef5d26b831e51401ccb541b6a2099a1e07bacc91b5c6063863b9b05f983f2d6beb62
         dest: pnpm-bin
+
+      # cef | layout taken from .deb output build
+      - type: archive
+        only-arches: [x86_64]
+        url: https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linux64_minimal.tar.bz2
+        sha256: e87e2c76304372dd28b899ceb6efa4b353f52700594ddc358a8237ec07ec6492
+        dest: cef/154.0.34/cef_linux_x86_64
+      - type: inline
+        only-arches: [x86_64]
+        dest: cef/154.0.34/cef_linux_x86_64
+        dest-filename: archive.json
+        contents: |
+          {"type": "minimal", "name": "cef_binary_154.0.34+g14c5a08+chromium-154.0.8037.98_linux64_minimal.tar.bz2", "sha1": "15c91ad767097217b2e82ba8b933fe30b134be69"}
+      - type: archive
+        only-arches: [aarch64]
+        url: https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linuxarm64_minimal.tar.bz2
+        sha256: 4598b350e5a43519dbb9f1c732e8b184333572da53244ff55cc063003c34c5e4
+        dest: cef/154.0.34/cef_linux_aarch64
+      - type: inline
+        only-arches: [aarch64]
+        dest: cef/154.0.34/cef_linux_aarch64
+        dest-filename: archive.json
+        contents: |
+          {"type": "minimal", "name": "cef_binary_154.0.34+g14c5a08+chromium-154.0.8037.98_linuxarm64_minimal.tar.bz2", "sha1": "fa85793519eef199e6b6fa8cc8d6f0eb45c6dac2"}
+      - type: shell
+        commands:
+          - |
+            cd cef/154.0.34/*
+            # flatten Release/ and Resources/
+            mv Release/* Resources/* .
+            rmdir Release Resources
+            # cef versions 152 and above no longer include these shared libraries as seperate files and are inside libcef.so
+            # but tauri still requires the file to exist, temporary workaround until it's fixed (https://github.com/tauri-apps/tauri/pull/16338)
+            echo '' | gcc -shared -x c - -o libEGL.so
+            echo '' | gcc -shared -x c - -o libGLESv2.so
+
+      # wrapped launcher
+      - type: script
+        dest-filename: lepse-wrapped.sh
+        commands:
+          - export ZYPAK_CEF_LIBRARY_PATH=/app/share/lepse/libcef.so
+          - exec zypak-wrapper /app/share/lepse/lepse "$@"
+
     build-commands:
+      # install deps
       - cargo --offline fetch --manifest-path apps/lachesis/src-tauri/Cargo.toml
       - pnpm install --offline --frozen-lockfile --filter @lepse/lachesis...
+      # build app
       - >-
-        pnpm --filter @lepse/lachesis tbuild -b deb
+        pnpm --filter @lepse/lachesis tauri build -b deb
         -c '{"bundle":{"createUpdaterArtifacts":false}}'
-      - >-
-        install -Dm755
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/bin/lepse
-        /app/bin/app.lepse.Lepse
-      - >-
-        install -Dm644
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/applications/lepse.desktop
-        /app/share/applications/app.lepse.Lepse.desktop
+        --features cef -- --no-default-features
+      # copy usr/share (usr/bin only has a symlink to share/lepse/lepse)
+      - cp -a apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/. /app/share/
+      - install -Dm755 lepse-wrapped.sh /app/bin/lepse
+      # edit desktop file
       - >-
         desktop-file-edit
-        --set-icon=app.lepse.Lepse
-        --set-key="Exec" --set-value="app.lepse.Lepse"
         --set-key="Categories" --set-value="Utility;Clock;"
         --set-key="Keywords" --set-value="aesthetic;productivity;clock;calendar;pomodoro;timer;focus;habits;"
-        /app/share/applications/app.lepse.Lepse.desktop
-      - >-
-        install -Dm644
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/icons/hicolor/128x128/apps/lepse.png
-        /app/share/icons/hicolor/128x128/apps/app.lepse.Lepse.png
-      - >-
-        install -Dm644
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/icons/hicolor/32x32/apps/lepse.png
-        /app/share/icons/hicolor/32x32/apps/app.lepse.Lepse.png
-      - >-
-        install -Dm644
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/icons/hicolor/256x256@2/apps/lepse.png
-        /app/share/icons/hicolor/512x512/apps/app.lepse.Lepse.png
-      - >-
-        install -Dm644
-        apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/metainfo/app.lepse.Lepse.metainfo.xml
-        /app/share/metainfo/app.lepse.Lepse.metainfo.xml
+        /app/share/applications/lepse.desktop
+      - rm -f /app/share/lepse/libEGL.so /app/share/lepse/libGLESv2.so # remove dummy files
