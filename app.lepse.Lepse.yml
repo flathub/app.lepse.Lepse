@@ -1,6 +1,6 @@
 id: app.lepse.Lepse
 runtime: org.gnome.Platform
-runtime-version: "51"
+runtime-version: '51'
 sdk: org.gnome.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
@@ -33,18 +33,18 @@ modules:
       env:
         HOME: /run/build/lepse
         CARGO_HOME: /run/build/lepse/cargo
-        CARGO_NET_OFFLINE: "true"
+        CARGO_NET_OFFLINE: 'true'
         XDG_CACHE_HOME: /run/build/lepse/flatpak-node/cache
         XDG_DATA_HOME: /run/build/lepse/flatpak-node/data
-        PNPM_CONFIG_TRUST_LOCKFILE: "true"
+        PNPM_CONFIG_TRUST_LOCKFILE: 'true'
         # this is where the cef sources are downloaded (cef-dll-sys looks in <CEF_PATH>/<cef version>/<os_arch>)
         CEF_PATH: /run/build/lepse/cef
 
     sources:
       - type: git
         url: https://github.com/aervxa/lepse.git
-        tag: v0.3.2
-        commit: 00b097aae6c3b0dd8dd076ad8c1162d726feee4d
+        tag: v0.3.3
+        commit: 00574e2bf7f933269cc555e706e2719e7eee4040
         x-checker-data:
           type: git
           tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$ # semver official javascript regex, but merged into one group and to add prefix 'v'
@@ -122,7 +122,8 @@ modules:
         -c '{"bundle":{"createUpdaterArtifacts":false}}'
         --features cef -- --no-default-features
       # copy usr/share (usr/bin only has a symlink to share/lepse/lepse)
-      - cp -a apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/. /app/share/
+      - cp -a apps/lachesis/src-tauri/target/release/bundle/deb/*/data/usr/share/.
+        /app/share/
       - install -Dm755 lepse-wrapped.sh /app/bin/lepse
       # edit desktop file
       - >-
