@@ -43,11 +43,12 @@ modules:
     sources:
       - type: git
         url: https://github.com/aervxa/lepse.git
-        tag: v0.3.4
-        commit: 74cf3860735ab40b4fff5b183dc25729be2a4127
+        tag: v0.4.0
+        commit: 96719922617ed3d6407434137183d4c5eb12e609
         x-checker-data:
           type: git
-          tag-pattern: ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$ # semver official javascript regex, but merged into one group and to add prefix 'v'
+          tag-pattern: 
+            ^v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$            # semver official javascript regex, but merged into one group and to add prefix 'v'
           version-scheme: semantic
       - cargo-sources.json
       - node-sources.json
@@ -73,7 +74,8 @@ modules:
       # cef | layout taken from .deb output build
       - type: archive
         only-arches: [x86_64]
-        url: https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linux64_minimal.tar.bz2
+        url: 
+          https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linux64_minimal.tar.bz2
         sha256: e87e2c76304372dd28b899ceb6efa4b353f52700594ddc358a8237ec07ec6492
         dest: cef/154.0.34/cef_linux_x86_64
       - type: inline
@@ -84,7 +86,8 @@ modules:
           {"type": "minimal", "name": "cef_binary_154.0.34+g14c5a08+chromium-154.0.8037.98_linux64_minimal.tar.bz2", "sha1": "15c91ad767097217b2e82ba8b933fe30b134be69"}
       - type: archive
         only-arches: [aarch64]
-        url: https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linuxarm64_minimal.tar.bz2
+        url: 
+          https://cef-builds.spotifycdn.com/cef_binary_154.0.34%2Bg14c5a08%2Bchromium-154.0.8037.98_linuxarm64_minimal.tar.bz2
         sha256: 4598b350e5a43519dbb9f1c732e8b184333572da53244ff55cc063003c34c5e4
         dest: cef/154.0.34/cef_linux_aarch64
       - type: inline
