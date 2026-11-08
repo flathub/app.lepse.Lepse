@@ -11,12 +11,13 @@ rename-desktop-file: lepse.desktop
 rename-icon: lepse
 
 finish-args:
-  - --socket=x11 # cef is x11 only
-  - --socket=pulseaudio
-  - --device=dri
-  - --share=network
-  - --share=ipc
-  - --talk-name=org.kde.StatusNotifierWatcher
+  - --socket=x11 # for rendering (cef is x11 only)
+  - --socket=pulseaudio # for audio playing
+  - --device=dri # for hardware accelerated webviews
+  - --share=network # online sync
+  - --share=ipc # for webview and backend communication
+  - --talk-name=org.kde.StatusNotifierWatcher # for tray
+  - --talk-name=org.freedesktop.Notifications # for notifications (notify-rust uses zbus)
 
 modules:
   - name: zypak
