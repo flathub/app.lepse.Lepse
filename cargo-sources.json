@@ -2,8 +2,14 @@
     {
         "type": "git",
         "url": "https://github.com/lepsehq/tauri",
-        "commit": "0434538e89ef9586187674754ad46c8b19600407",
-        "dest": "flatpak-cargo/git/tauri-0434538"
+        "commit": "37c0723f7c9bd421a58dabd84d78f35f7114c2a4",
+        "dest": "flatpak-cargo/git/tauri-37c0723"
+    },
+    {
+        "type": "git",
+        "url": "https://github.com/lepsehq/tauri-plugins",
+        "commit": "137d438206b1a17b2832ddcb8774b83b9384e6c2",
+        "dest": "flatpak-cargo/git/tauri-plugins-137d438"
     },
     {
         "type": "git",
@@ -6748,7 +6754,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri\" \"cargo/vendor/tauri\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri\" \"cargo/vendor/tauri\""
         ]
     },
     {
@@ -6766,7 +6772,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-build\" \"cargo/vendor/tauri-build\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-build\" \"cargo/vendor/tauri-build\""
         ]
     },
     {
@@ -6784,7 +6790,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-codegen\" \"cargo/vendor/tauri-codegen\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-codegen\" \"cargo/vendor/tauri-codegen\""
         ]
     },
     {
@@ -6802,7 +6808,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-macros\" \"cargo/vendor/tauri-macros\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-macros\" \"cargo/vendor/tauri-macros\""
         ]
     },
     {
@@ -6844,16 +6850,21 @@
         "dest-filename": ".cargo-checksum.json"
     },
     {
-        "type": "archive",
-        "archive-type": "tar-gzip",
-        "url": "https://static.crates.io/crates/tauri-plugin-notification/tauri-plugin-notification-3.0.0-alpha.3.crate",
-        "sha256": "b72896d9e7baa15e08d7fdc5c308929f50cc25483cdf699b59231d0f28f3bedd",
-        "dest": "cargo/vendor/tauri-plugin-notification-3.0.0-alpha.3"
+        "type": "shell",
+        "commands": [
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-plugins-137d438/plugins/notification\" \"cargo/vendor/tauri-plugin-notification\""
+        ]
     },
     {
         "type": "inline",
-        "contents": "{\"package\": \"b72896d9e7baa15e08d7fdc5c308929f50cc25483cdf699b59231d0f28f3bedd\", \"files\": {}}",
-        "dest": "cargo/vendor/tauri-plugin-notification-3.0.0-alpha.3",
+        "contents": "[package]\nname = \"tauri-plugin-notification\"\nversion = \"3.0.0-alpha.3\"\ndescription = \"Send desktop and mobile notifications on your Tauri application.\"\nedition = \"2024\"\nauthors = [\"Tauri Programme within The Commons Conservancy\"]\nlicense = \"Apache-2.0 OR MIT\"\nrust-version = \"1.95\"\nrepository = \"https://github.com/tauri-apps/plugins-workspace\"\nlinks = \"tauri-plugin-notification\"\nexclude = [\"/banner.png\", \"/guest-js\", \"/package.json\", \"/rollup.config.js\", \"/test\", \"/tsconfig.json\"]\n\n[package.metadata.docs.rs]\ntargets = [\"x86_64-unknown-linux-gnu\", \"x86_64-linux-android\"]\n\n[package.metadata.platforms.support.windows]\nlevel = \"full\"\nnotes = \"Only works for installed apps. Shows powershell name & icon in development.\"\n\n[package.metadata.platforms.support.linux]\nlevel = \"full\"\nnotes = \"\"\n\n[package.metadata.platforms.support.macos]\nlevel = \"full\"\nnotes = \"\"\n\n[package.metadata.platforms.support.android]\nlevel = \"full\"\nnotes = \"\"\n\n[package.metadata.platforms.support.ios]\nlevel = \"full\"\nnotes = \"\"\n\n[build-dependencies.tauri-plugin]\nfeatures = [\"build\"]\nversion = \"3.0.0-alpha.3\"\n\n[dependencies]\nserde_json = \"1\"\nlog = \"0.4.21\"\nthiserror = \"2\"\nrand = \"0.9\"\nserde_repr = \"0.1\"\n\n[dependencies.serde]\nversion = \"1\"\nfeatures = [\"derive\"]\n\n[dependencies.tauri]\nversion = \"3.0.0-alpha.4\"\ndefault-features = false\n\n[dependencies.time]\nversion = \"0.3\"\nfeatures = [\"serde\", \"parsing\", \"formatting\"]\n\n[dependencies.url]\nversion = \"2\"\nfeatures = [\"serde\"]\n\n[target.\"cfg(any(target_os = \\\"macos\\\", windows, target_os = \\\"linux\\\", target_os = \\\"dragonfly\\\", target_os = \\\"freebsd\\\", target_os = \\\"openbsd\\\", target_os = \\\"netbsd\\\"))\".dependencies]\nnotify-rust = \"4.18\"\n\n[target.\"cfg(any(target_os = \\\"linux\\\", target_os = \\\"dragonfly\\\", target_os = \\\"freebsd\\\", target_os = \\\"openbsd\\\", target_os = \\\"netbsd\\\"))\".dependencies]\nzbus = \"5\"\n\n[features]\nwindows7-compat = []\nwin7-notifications = []\nwindows-version = []\n",
+        "dest": "cargo/vendor/tauri-plugin-notification",
+        "dest-filename": "Cargo.toml"
+    },
+    {
+        "type": "inline",
+        "contents": "{\"package\": null, \"files\": {}}",
+        "dest": "cargo/vendor/tauri-plugin-notification",
         "dest-filename": ".cargo-checksum.json"
     },
     {
@@ -6937,7 +6948,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-runtime\" \"cargo/vendor/tauri-runtime\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-runtime\" \"cargo/vendor/tauri-runtime\""
         ]
     },
     {
@@ -6955,7 +6966,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-runtime-cef\" \"cargo/vendor/tauri-runtime-cef\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-runtime-cef\" \"cargo/vendor/tauri-runtime-cef\""
         ]
     },
     {
@@ -6973,7 +6984,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-runtime-wry\" \"cargo/vendor/tauri-runtime-wry\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-runtime-wry\" \"cargo/vendor/tauri-runtime-wry\""
         ]
     },
     {
@@ -6991,7 +7002,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-0434538/crates/tauri-utils\" \"cargo/vendor/tauri-utils\""
+            "cp -r --reflink=auto \"flatpak-cargo/git/tauri-37c0723/crates/tauri-utils\" \"cargo/vendor/tauri-utils\""
         ]
     },
     {
@@ -9210,7 +9221,7 @@
     },
     {
         "type": "inline",
-        "contents": "[source.vendored-sources]\ndirectory = \"cargo/vendor\"\n\n[source.crates-io]\nreplace-with = \"vendored-sources\"\n\n[source.\"https://github.com/lepsehq/tauri\"]\ngit = \"https://github.com/lepsehq/tauri\"\nreplace-with = \"vendored-sources\"\nrev = \"0434538e89ef9586187674754ad46c8b19600407\"\n\n[source.\"https://github.com/aervxa/tray-icon\"]\ngit = \"https://github.com/aervxa/tray-icon\"\nreplace-with = \"vendored-sources\"\nrev = \"d2212b4baf8556ee0fe3d3ea65966b506f95a2b7\"\n",
+        "contents": "[source.vendored-sources]\ndirectory = \"cargo/vendor\"\n\n[source.crates-io]\nreplace-with = \"vendored-sources\"\n\n[source.\"https://github.com/lepsehq/tauri\"]\ngit = \"https://github.com/lepsehq/tauri\"\nreplace-with = \"vendored-sources\"\nrev = \"37c0723f7c9bd421a58dabd84d78f35f7114c2a4\"\n\n[source.\"https://github.com/lepsehq/tauri-plugins\"]\ngit = \"https://github.com/lepsehq/tauri-plugins\"\nreplace-with = \"vendored-sources\"\nrev = \"137d438206b1a17b2832ddcb8774b83b9384e6c2\"\n\n[source.\"https://github.com/aervxa/tray-icon\"]\ngit = \"https://github.com/aervxa/tray-icon\"\nreplace-with = \"vendored-sources\"\nrev = \"d2212b4baf8556ee0fe3d3ea65966b506f95a2b7\"\n",
         "dest": "cargo",
         "dest-filename": "config"
     }
