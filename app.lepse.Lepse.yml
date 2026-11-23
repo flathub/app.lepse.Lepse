@@ -43,8 +43,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/aervxa/lepse.git
-        tag: v0.4.2
-        commit: ffb010af7ceecf1977a6eb13f9ece2c3754d5ad8
+        tag: v0.4.3
+        commit: fa8914cb4582f339694c46193b637d87696feab8
         x-checker-data:
           type: git
           tag-pattern: 
